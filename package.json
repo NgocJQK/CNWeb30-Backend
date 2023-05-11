@@ -1,0 +1,20 @@
+{
+  "name": "cnweb30-backend",
+  "version": "1.0.0",
+  "description": "Backend repository for CNWeb-30 Project",
+  "main": "index.js",
+  "scripts": {
+    "start": "node app.js",
+    "test": "nodemon app"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "mongoose": "^6.11.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  }
+}

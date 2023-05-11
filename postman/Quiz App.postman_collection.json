@@ -1,0 +1,138 @@
+{
+	"info": {
+		"_postman_id": "a0a9fd8b-78d4-40c9-bb92-60af4cc21bba",
+		"name": "Quiz App",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25726356"
+	},
+	"item": [
+		{
+			"name": "quiz",
+			"item": [
+				{
+					"name": "getAllQuizs",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3001/api/quizs",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"api",
+								"quizs"
+							],
+							"query": [
+								{
+									"key": "title",
+									"value": "a",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getQuizById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3001/api/quizs/6458f2d649c56b0d4e630ef2",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"api",
+								"quizs",
+								"6458f2d649c56b0d4e630ef2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "createQuiz",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"startTime\": \"2023-05-31T15:00:00+07:00\",\r\n    \"endTime\": \"2023-05-31T15:30:00+07:00\",\r\n    \"formLink\": \"https://youtu.be/dQw4w9WgXcQ\",\r\n    \"classId\": \"\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3001/api/quizs",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"api",
+								"quizs"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateQuiz",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"startTime\": \"2023-05-31T15:00:00+07:00\",\r\n    \"endTime\": \"2023-05-31T15:45:00+07:00\",\r\n    \"formLink\": \"https://youtu.be/dQw4w9WgXcQ\",\r\n    \"classId\": \"\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3001/api/quizs/645d04485aa78ee9ac47e189",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"api",
+								"quizs",
+								"645d04485aa78ee9ac47e189"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteQuiz",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:3001/api/quizs/6458c84238b88ba18c9d7a9d",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"api",
+								"quizs",
+								"6458c84238b88ba18c9d7a9d"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

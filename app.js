@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 const quizRouter = require("./routes/QuizRoutes");
+const classRouter = require("./routes/ClassRoutes")
 
 //configure mongoose
 mongoose.set('strictQuery', false);
@@ -23,6 +24,7 @@ mongoose.connect(
 //middleware
 app.use(express.json());
 app.use("/api/quizs", quizRouter);
+app.use("/api/classes", classRouter);
 
 app.listen(3001, () => {
   console.log("Server is running on port 3001");

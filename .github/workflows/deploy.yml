@@ -42,7 +42,6 @@ jobs:
           echo "Service file copied!"
 
           npm install
-          npm run build
 
           if [ $? -eq 0 ]; then
               systemctl restart cn-web-backend.service

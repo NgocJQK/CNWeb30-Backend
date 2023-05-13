@@ -26,7 +26,7 @@ jobs:
         script: |
           eval "$(ssh-agent -s)"
           ssh-add ~/.ssh/github@web-server-2
-          cd ~/CNWeb-30
+          cd ~/CNWeb30-Backend
           export PATH=/root/.nvm/versions/node/v19.1.0/bin/:$PATH
           git stash save --keep-index --include-untracked
           git pull

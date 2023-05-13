@@ -24,8 +24,8 @@ mongoose.connect(
 app.use(express.json());
 app.use("/api/quizs", quizRouter);
 
-app.listen(3001, () => {
-  console.log("Server is running on port 3001");
+app.listen(3005, () => {
+  console.log("Server is running on port 3005");
 });
 
 module.exports = app;

@@ -2,7 +2,9 @@ const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 const quizRouter = require("./routes/QuizRoutes");
-const classRouter = require("./routes/ClassRoutes")
+const classRouter = require("./routes/ClassRoutes");
+// const { swaggerDocs } = require("./resources/swagger");
+const swaggerRouter = require("./resources/swaggerRoutes");
 
 //configure mongoose
 mongoose.set('strictQuery', false);
@@ -25,9 +27,11 @@ mongoose.connect(
 app.use(express.json());
 app.use("/api/quizs", quizRouter);
 app.use("/api/classes", classRouter);
+app.use("/api/swagger", swaggerRouter);
 
 app.listen(3005, () => {
   console.log("Server is running on port 3005");
+  // swaggerDocs(app, 3005);
 });
 
 module.exports = app;

@@ -31,6 +31,9 @@ app.use("/api/swagger", swaggerRouter);
 
 app.listen(3005, () => {
   console.log("Server is running on port 3005");
+  console.log(
+    `Docs are available on http://localhost:3005/api/swagger`
+  );
   // swaggerDocs(app, 3005);
 });
 

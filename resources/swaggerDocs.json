@@ -8,7 +8,11 @@
   "tags": [
     {
       "name": "quiz",
-      "description": "Basic info about quizs"  
+      "description": "Basic info about quizs"
+    },
+    {
+      "name": "class",
+      "description": "Basic info about classes"
     }
   ],
   "components": {
@@ -61,8 +65,27 @@
       "Class": {
         "type": "object",
         "properties": {
-          "property": {
-            "type": "integer"
+          "codename": {
+            "type": "string",
+            "default": "123456"
+          },
+          "subject": {
+            "type": "string",
+            "default": "CN Web"
+          },
+          "semester": {
+            "type": "integer",
+            "minimum": 0,
+            "default": 20222
+          },
+          "studentCount": {
+            "type": "integer",
+            "minimum": 0,
+            "default": 50
+          },
+          "note": {
+            "type": "string",
+            "default": "A note"
           }
         }
       }
@@ -103,6 +126,17 @@
         "summary": "Create new quiz",
         "description": "Return new quiz created",
         "parameters": [],
+        "requestBody": {
+          "description": "New quiz's values",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Quiz"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -156,7 +190,7 @@
                     }
                   ]
                 }
-              } 
+              }
             }
           }
         }
@@ -182,7 +216,7 @@
           "required": true,
           "content": {
             "application/json": {
-              "schema":{
+              "schema": {
                 "$ref": "#/components/schemas/Quiz"
               }
             }
@@ -236,6 +270,72 @@
                     },
                     {
                       "$ref": "#/components/schemas/Quiz"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/classes": {
+      "get": {
+        "tags": ["class"],
+        "summary": "Get all classes",
+        "description": "Return all classes",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/DefaultMongo"
+                      },
+                      {
+                        "$ref": "#/components/schemas/Class"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["class"],
+        "summary": "Create new class",
+        "description": "Return new class created",
+        "parameters": [],
+        "requestBody": {
+          "description": "New class's values",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Class"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/DefaultMongo"
+                    },
+                    {
+                      "$ref": "#/components/schemas/Class"
                     }
                   ]
                 }

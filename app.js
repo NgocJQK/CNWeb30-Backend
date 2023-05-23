@@ -25,7 +25,7 @@ mongoose.connect(
 
 //middleware
 app.use(express.json());
-app.use("/api/quizs", quizRouter);
+app.use("/api/quizzes", quizRouter);
 app.use("/api/classes", classRouter);
 app.use("/api/swagger", swaggerRouter);
 

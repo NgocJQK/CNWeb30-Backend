@@ -4,11 +4,24 @@
     "title": "Quiz API",
     "version": "1.0"
   },
-  "servers": [{ "url": "http://localhost:3005/api" }],
+  "servers": [
+    { 
+      "url": "http://localhost:3005/api",
+      "description": "Dev server"
+    },
+    {
+      "url": "http://65.108.79.164:3005/api",
+      "description": "Live server"
+    }
+  ],
   "tags": [
     {
       "name": "quiz",
-      "description": "Basic info about quizs"  
+      "description": "Basic info about quizzes"
+    },
+    {
+      "name": "class",
+      "description": "Basic info about classes"
     }
   ],
   "components": {
@@ -61,15 +74,34 @@
       "Class": {
         "type": "object",
         "properties": {
-          "property": {
-            "type": "integer"
+          "codename": {
+            "type": "string",
+            "default": "123456"
+          },
+          "subject": {
+            "type": "string",
+            "default": "CN Web"
+          },
+          "semester": {
+            "type": "integer",
+            "minimum": 0,
+            "default": 20222
+          },
+          "studentCount": {
+            "type": "integer",
+            "minimum": 0,
+            "default": 50
+          },
+          "note": {
+            "type": "string",
+            "default": "A note"
           }
         }
       }
     }
   },
   "paths": {
-    "/quizs": {
+    "/quizzes": {
       "get": {
         "tags": ["quiz"],
         "summary": "Get all quizzes",
@@ -103,6 +135,17 @@
         "summary": "Create new quiz",
         "description": "Return new quiz created",
         "parameters": [],
+        "requestBody": {
+          "description": "New quiz's values",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Quiz"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -124,7 +167,7 @@
         }
       }
     },
-    "/quizs/{id}": {
+    "/quizzes/{id}": {
       "get": {
         "tags": ["quiz"],
         "summary": "Get quiz by id",
@@ -156,7 +199,7 @@
                     }
                   ]
                 }
-              } 
+              }
             }
           }
         }
@@ -182,7 +225,7 @@
           "required": true,
           "content": {
             "application/json": {
-              "schema":{
+              "schema": {
                 "$ref": "#/components/schemas/Quiz"
               }
             }
@@ -236,6 +279,193 @@
                     },
                     {
                       "$ref": "#/components/schemas/Quiz"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/classes": {
+      "get": {
+        "tags": ["class"],
+        "summary": "Get all classes",
+        "description": "Return all classes",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/DefaultMongo"
+                      },
+                      {
+                        "$ref": "#/components/schemas/Class"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["class"],
+        "summary": "Create new class",
+        "description": "Return new class created",
+        "parameters": [],
+        "requestBody": {
+          "description": "New class's values",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Class"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/DefaultMongo"
+                    },
+                    {
+                      "$ref": "#/components/schemas/Class"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/classes/{id}": {
+      "get": {
+        "tags": ["class"],
+        "summary": "Get class by id",
+        "description": "Return single class",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of class to return",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "645d04485aa78ee9ac47e189"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/DefaultMongo"
+                    },
+                    {
+                      "$ref": "#/components/schemas/Class"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["class"],
+        "summary": "Update class by id",
+        "description": "Return single class before update",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of class to return",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "645d04485aa78ee9ac47e189"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Class's updated values",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Class"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/DefaultMongo"
+                    },
+                    {
+                      "$ref": "#/components/schemas/Class"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["class"],
+        "summary": "Delete class by id",
+        "description": "Return deleted class",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of class to return",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "645d04485aa78ee9ac47e189"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/DefaultMongo"
+                    },
+                    {
+                      "$ref": "#/components/schemas/Class"
                     }
                   ]
                 }

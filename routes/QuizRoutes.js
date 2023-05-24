@@ -1,6 +1,6 @@
 const express = require("express");
 const {
-    getAllQuizs,
+    getAllQuizzes,
     getQuizById,
     createQuiz,
     updateQuiz,
@@ -9,7 +9,7 @@ const {
 
 const router = express.Router();
 
-router.route("/").get(getAllQuizs).post(createQuiz);
+router.route("/").get(getAllQuizzes).post(createQuiz);
 router.route("/:id").get(getQuizById).put(updateQuiz).delete(deleteQuiz);
 
 module.exports = router;

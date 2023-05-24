@@ -1,6 +1,6 @@
 const QuizModel = require("../models/Quiz");
 
-exports.getAllQuizs = async () => {
+exports.getAllQuizzes = async () => {
     return await QuizModel.find();
 }
 

@@ -1,12 +1,13 @@
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
-const quizRouter = require("./routes/QuizRoutes");
-const classRouter = require("./routes/ClassRoutes");
-// const { swaggerDocs } = require("./resources/swagger");
-const swaggerRouter = require("./resources/swaggerRoutes");
 const cors = require("cors");
 const compression = require("compression");
+
+const swaggerRouter = require("./resources/swaggerRoutes");
+const quizRouter = require("./routes/QuizRoutes");
+const classRouter = require("./routes/ClassRoutes");
+const quizRecordRouter = require("./routes/QuizRecordRoutes");
 
 //configure mongoose
 mongoose.set('strictQuery', false);
@@ -37,13 +38,13 @@ app.use(
 app.use("/api/quizzes", quizRouter);
 app.use("/api/classes", classRouter);
 app.use("/api/swagger", swaggerRouter);
+app.use("/api/quizRecords", quizRecordRouter);
 
 app.listen(3005, () => {
   console.log("Server is running on port 3005");
   console.log(
     `Docs are available on http://localhost:3005/api/swagger`
   );
-  // swaggerDocs(app, 3005);
 });
 
 module.exports = app;

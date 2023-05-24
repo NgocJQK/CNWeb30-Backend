@@ -5,7 +5,8 @@ const quizSchema = require("./Quiz")
 const quizRecordSchema = new Schema({
     quiz: {
         type: Schema.Types.ObjectId,
-        ref: 'Quiz'
+        ref: 'Quiz',
+        default: null
     },
     studentId: {
         type: String,

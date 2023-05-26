@@ -1,8 +1,8 @@
 const quizService = require("../services/QuizService");
 
-exports.getAllQuizs = async (req, res) => {
+exports.getAllQuizzes = async (req, res) => {
   try {
-    const quizzes = await quizService.getAllQuizs();
+    const quizzes = await quizService.getAllQuizzes();
     res.json({ data: quizzes, status: "success" });
   } catch (err) {
     res.status(500).json({ error: err.message });

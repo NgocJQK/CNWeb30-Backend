@@ -8,6 +8,7 @@ const swaggerRouter = require("./resources/swaggerRoutes");
 const quizRouter = require("./routes/QuizRoutes");
 const classRouter = require("./routes/ClassRoutes");
 const quizRecordRouter = require("./routes/QuizRecordRoutes");
+const userRouter = require("./routes/UserRoutes");
 
 //configure mongoose
 mongoose.set('strictQuery', false);
@@ -39,6 +40,7 @@ app.use("/api/quizzes", quizRouter);
 app.use("/api/classes", classRouter);
 app.use("/api/swagger", swaggerRouter);
 app.use("/api/quizRecords", quizRecordRouter);
+app.use("/api/users", userRouter);
 
 app.listen(3005, () => {
   console.log("Server is running on port 3005");

@@ -10,6 +10,10 @@ exports.findUserByEmail = async (email) => {
   return await UserModel.findOne({ email: `${email}` });
 };
 
+exports.createUser = async (user) => {
+  return await UserModel.create(user);
+}
+
 exports.register = async (user) => {
   // try {
   //   let existUser = this.findUserByEmail(user.email);
@@ -33,56 +37,73 @@ exports.register = async (user) => {
   // } catch (e) {
   //   return { status: false, message: e.message };
   // }
-  
-    let existUser = this.findUserByEmail(user.email);
-    if (existUser == null) {
-      bcrypt
-        .hash(user.password, 10)
-        .then((hashedPassword) => {
-          const newUser = new User({
-            userName: user.userName,
-            email: user.email,
-            password: hashedPassword,
-          });
-          return { status: true, data: UserModel.create(newUser) };
-        });
-    } else {
-      return { status: false, data: new UserModel() };
-    }
+  let existUser = await this.findUserByEmail(user.email);
+  if (existUser == null) {
+    bcrypt.hash(user.password, 10).then((hashedPassword) => {
+      const newUser = new User({
+        userName: user.userName,
+        email: user.email,
+        password: hashedPassword,
+      });
+    });
+    return { status: true, data: UserModel.create(newUser), message: "" };
+  } else {
+    return { status: false, data: null, message: "Existed email" };
+  }
 };
 
 exports.login = async (user) => {
-  try {
-    this.findUserByEmail(user.email)
-      .then((existUser) => {
-        bcrypt
-          .compare(user.password, existUser.password)
-          .then((passwordCheck) => {
-            if (!passwordCheck) {
-              return { status: false };
-            }
+  // try {
+  //   this.findUserByEmail(user.email)
+  //     .then((existUser) => {
+  //       bcrypt
+  //         .compare(user.password, existUser.password)
+  //         .then((passwordCheck) => {
+  //           if (!passwordCheck) {
+  //             return { status: false, token: "" };
+  //           }
 
-            const token = jwt.sign(
-              {
-                userId: user._id,
-                userEmail: user.email,
-              },
-              secretKey,
-              {
-                expiresIn: "24h",
-              }
-            );
+  //           const token = jwt.sign(
+  //             {
+  //               userId: user._id,
+  //               userEmail: user.email,
+  //             },
+  //             secretKey,
+  //             {
+  //               expiresIn: "24h",
+  //             }
+  //           );
 
-            return { status: true, token: token };
-          })
-          .catch(() => {
-            return { status: false };
-          });
-      })
-      .catch(() => {
-        return { status: false };
-      });
-  } catch (e) {
-    return { status: false, message: e.message };
-  }
+  //           return { status: true, token: token };
+  //         })
+  //         .catch(() => {
+  //           return { status: false, token: "" };
+  //         });
+  //     })
+  //     .catch(() => {
+  //       return { status: false, token: "" };
+  //     });
+  // } catch (e) {
+  //   return { status: false, message: e.message };
+  // }
+  this.findUserByEmail(user.email).then((existUser) => {
+    bcrypt.compare(user.password, existUser.password).then((passwordCheck) => {
+      if (!passwordCheck) {
+        return { status: false, token: "" };
+      }
+
+      const token = jwt.sign(
+        {
+          userId: user._id,
+          userEmail: user.email,
+        },
+        secretKey,
+        {
+          expiresIn: "24h",
+        }
+      );
+
+      return { status: true, token: token };
+    });
+  });
 };

@@ -24,7 +24,7 @@ exports.register = async (req, res) => {
           res.status(500).json({ error: err.message });
         });
     } else {
-      res.status(400).json({ message: "Email has been used" });
+      res.status(409).json({ message: "Email has been used" });
     }
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -41,13 +41,13 @@ exports.login = async (req, res) => {
           .compare(user.password, existUser.password)
           .then((passwordCheck) => {
             if (!passwordCheck) {
-              res.status(400).json({ error: "User and password incorrect" });
+              res.status(401).json({ message: "User and password incorrect" });
             }
 
             const token = jwt.sign(
               {
-                userId: user._id,
-                userEmail: user.email,
+                userId: existUser._id,
+                userEmail: existUser.email,
               },
               userService.secretKey,
               {
@@ -59,11 +59,11 @@ exports.login = async (req, res) => {
             res.json({ data: {token: token, user: returnUser}, status: "success" });
           })
           .catch((err) => {
-            res.status(400).json({ error: err.message });
+            res.status(500).json({ error: err.message });
           });
       })
       .catch(() => {
-        res.status(400).json({ error: "User and password incorrect" });
+        res.status(401).json({ message: "User and password incorrect" });
       });
   } catch (err) {
     res.status(500).json({ error: err.message });

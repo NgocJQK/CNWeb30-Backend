@@ -36,9 +36,9 @@ app.use(
     threshold: 10 * 1000,
   })
 );
+app.use("/api/swagger", swaggerRouter);
 app.use("/api/quizzes", quizRouter);
 app.use("/api/classes", classRouter);
-app.use("/api/swagger", swaggerRouter);
 app.use("/api/quizRecords", quizRecordRouter);
 app.use("/api/users", userRouter);
 

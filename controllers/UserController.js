@@ -56,7 +56,7 @@ exports.login = async (req, res) => {
             );
 
             const { password: password, ...returnUser } = existUser;
-            res.json({ data: {token: token, user: returnUser}, status: "success" });
+            res.json({ data: {token, ...returnUser}, status: "success" });
           })
           .catch((err) => {
             res.status(500).json({ error: err.message });

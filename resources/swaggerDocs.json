@@ -5,7 +5,7 @@
     "version": "1.0"
   },
   "servers": [
-    { 
+    {
       "url": "http://localhost:3005/api",
       "description": "Dev server"
     },
@@ -26,6 +26,10 @@
     {
       "name": "quizRecord",
       "description": "Object to store student's attempt to register a roll call"
+    },
+    {
+      "name": "user",
+      "description": "Represent the end-user"
     }
   ],
   "components": {
@@ -124,6 +128,65 @@
           "note": {
             "type": "string",
             "default": "A note"
+          }
+        }
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "userName": {
+            "type": "string",
+            "default": "Nguyễn Văn A"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "default": "example@mailinator.com"
+          },
+          "password": {
+            "type": "string",
+            "format": "password",
+            "minLength": 8,
+            "default": "12345678"
+          }
+        }
+      },
+      "UserLogin": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "default": "example@mailinator.com"
+          },
+          "password": {
+            "type": "string",
+            "format": "password",
+            "minLength": 8,
+            "default": "12345678"
+          }
+        }
+      },
+      "UserResponse": {
+        "type": "object",
+        "properties": {
+          "userName": {
+            "type": "string",
+            "default": "Nguyễn Văn A"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "default": "example@mailinator.com"
+          }
+        }
+      },
+      "jwt": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string",
+            "default": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
           }
         }
       }
@@ -687,6 +750,91 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "/users/register": {
+      "post": {
+        "tags": ["user"],
+        "summary": "Create new user",
+        "description": "Return new user created",
+        "parameters": [],
+        "requestBody": {
+          "description": "New user's values",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/DefaultMongo"
+                    },
+                    {
+                      "$ref": "#/components/schemas/UserResponse"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Email has been used"
+          }
+        }
+      }
+    },
+    "/users/login": {
+      "post": {
+        "tags": ["user"],
+        "summary": "Login user",
+        "description": "Return user and jwt",
+        "parameters": [],
+        "requestBody": {
+          "description": "Existing user's values",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserLogin"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/DefaultMongo"
+                    },
+                    {
+                      "$ref": "#/components/schemas/UserResponse"
+                    },
+                    {
+                      "$ref": "#/components/schemas/jwt"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "User and password incorrect"
           }
         }
       }

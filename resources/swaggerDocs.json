@@ -74,8 +74,9 @@
             "format": "url",
             "example": "https://example.com/"
           },
-          "classId": {
-            "type": "string"
+          "_class": {
+            "type": "string",
+            "default": "647afcfd9524a2813008eb90"
           }
         }
       },

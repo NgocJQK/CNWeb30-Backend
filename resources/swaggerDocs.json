@@ -199,7 +199,16 @@
         "tags": ["quiz"],
         "summary": "Get all quizzes",
         "description": "Return all quizzes",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "_class",
+            "in": "query",
+            "description": "The class's id required in the results",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",

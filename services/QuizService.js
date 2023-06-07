@@ -20,8 +20,15 @@ const removeVersionKey = (document) => {
     return document ? document.toObject({versionKey: false}) : null;
 }
 
-exports.getAllQuizzes = async () => {
-  const quizzes = await QuizModel.find().populate("_class");
+exports.getAllQuizzes = async (filters = null) => {
+  let query = {};
+  if (filters) {
+    if ("_class" in filters) {
+      query._class = filters._class;
+    }
+  }
+  
+  const quizzes = await QuizModel.find(query).populate("_class");
   let returnData = [];
   quizzes.map((quiz) => {
     returnData.push(addStatusToQuiz(removeVersionKey(quiz)));

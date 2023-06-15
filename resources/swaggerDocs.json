@@ -74,8 +74,9 @@
             "format": "url",
             "example": "https://example.com/"
           },
-          "classId": {
-            "type": "string"
+          "_class": {
+            "type": "string",
+            "default": "647afcfd9524a2813008eb90"
           }
         }
       },
@@ -198,7 +199,16 @@
         "tags": ["quiz"],
         "summary": "Get all quizzes",
         "description": "Return all quizzes",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "_class",
+            "in": "query",
+            "description": "The class's id required in the results",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",

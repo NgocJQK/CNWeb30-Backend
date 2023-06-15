@@ -80,6 +80,22 @@
           }
         }
       },
+      "QuizResponse": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Quiz"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "status": {
+                "type": "string",
+                "enum": ["Not Started", "In Progress", "Finished"]
+              }
+            }
+          }
+        ]
+      },
       "Class": {
         "type": "object",
         "properties": {
@@ -222,7 +238,7 @@
                         "$ref": "#/components/schemas/DefaultMongo"
                       },
                       {
-                        "$ref": "#/components/schemas/Quiz"
+                        "$ref": "#/components/schemas/QuizResponse"
                       }
                     ]
                   }
@@ -297,7 +313,7 @@
                       "$ref": "#/components/schemas/DefaultMongo"
                     },
                     {
-                      "$ref": "#/components/schemas/Quiz"
+                      "$ref": "#/components/schemas/QuizResponse"
                     }
                   ]
                 }

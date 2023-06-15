@@ -6,11 +6,11 @@ const addStatusToQuiz = (quiz) => {
   const quizEndTime = quiz.endTime.getTime();
   let status = "";
   if (currentTime < quizStartTime) {
-    status = "incoming";
+    status = "Not Started";
   } else if (quizEndTime < currentTime) {
-    status = "finished";
+    status = "Finished";
   } else {
-    status = "happening";
+    status = "In Progress";
   }
   quiz.status = status;
   return quiz;

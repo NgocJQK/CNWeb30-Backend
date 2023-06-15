@@ -411,7 +411,17 @@
         "tags": ["class"],
         "summary": "Get all classes",
         "description": "Return all classes",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "groupBy",
+            "in": "query",
+            "description": "Select field to group classes by",
+            "schema": {
+              "type": "string",
+              "default": "semester"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",

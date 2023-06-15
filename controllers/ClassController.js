@@ -1,8 +1,14 @@
 const classService = require("../services/ClassService");
 
 exports.getAllClasses = async (req, res) => {
+  //filter
+  let filters = {};
+  if (req.query.groupBy) {
+    filters.groupBy = req.query.groupBy;
+  }
+
   try {
-    const _classs = await classService.getAllClasses();
+    const _classs = await classService.getAllClasses(filters);
     res.json({ data: _classs, status: "success" });
   } catch (err) {
     res.status(500).json({ error: err.message });

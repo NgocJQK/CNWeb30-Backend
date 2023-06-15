@@ -1,9 +1,16 @@
+const { default: mongoose } = require("mongoose");
 const ClassModel = require("../models/Class");
-const pluralize = require("pluralize");
 
 // Attempt to reuse the group function for future grouping (if any)
-const groupBy = async (model, list, property) => {
-  const propertys = pluralize(property);
+/**
+ * 
+ * @param {mongoose.Schema} model mongoose Schema model
+ * @param {array} list the original list
+ * @param {String} property property to broup by
+ * @param {String} arrayName the name of the new array of each group
+ * @returns {array} 
+ */
+const groupBy = async (model, list, property, arrayName) => {
   // initialize return list
   let returnData = await model.aggregate().group({
     _id: `$${property}`,
@@ -11,14 +18,14 @@ const groupBy = async (model, list, property) => {
   returnData.map((data) => {
     data[`${property}`] = data["_id"];
     delete data["_id"];
-    data[`${propertys}`] = [];
+    data[arrayName] = [];
   });
 
   // put items from old array to new array inside return list
   list.map((oldItem) => {
     returnData.map((newItem) => {
       if (oldItem[`${property}`] === newItem[`${property}`]) {
-        newItem[`${propertys}`].push(oldItem);
+        newItem[arrayName].push(oldItem);
       }
     });
   });
@@ -52,7 +59,7 @@ exports.getAllClasses = async (filters = null) => {
         // });
 
         // return semesters;
-        return await groupBy(ClassModel, classes, filters.groupBy);
+        return await groupBy(ClassModel, classes, filters.groupBy, "_classes");
       }
     }
   }

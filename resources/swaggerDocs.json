@@ -130,21 +130,11 @@
             "type": "string",
             "default": "645d04485aa78ee9ac47e189"
           },
-          "studentId": {
-            "type": "string",
-            "default": "20001234"
-          },
-          "studentName": {
-            "type": "string",
-            "default": "Nguyễn Văn A"
-          },
-          "isValid": {
-            "type": "boolean",
-            "default": true
-          },
-          "note": {
-            "type": "string",
-            "default": "A note"
+          "studentList": {
+            "type": "array",
+            "items":{
+              "$ref": "#/components/schemas/StudentInput"
+            }
           }
         }
       },
@@ -204,6 +194,35 @@
           "token": {
             "type": "string",
             "default": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+          }
+        }
+      },
+      "StudentInput": {
+        "type": "object",
+        "properties": {
+          "studentId": {
+            "type": "string",
+            "default": "20001234"
+          },
+          "studentName": {
+            "type": "string",
+            "default": "Nguyễn Văn A"
+          },
+          "ipAddress": {
+            "type": "string",
+            "format": "ipv6"
+          },
+          "isValid": {
+            "type": "boolean",
+            "default": true
+          },
+          "note": {
+            "type": "string",
+            "default": "A note"
+          },
+          "createdAt" :{
+            "type": "string",
+            "format": "date-time"
           }
         }
       }
@@ -608,7 +627,16 @@
         "tags": ["quizRecord"],
         "summary": "Get all quizzes",
         "description": "Return all quizzes",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "quiz",
+            "in": "query",
+            "description": "The quiz's id required in the results",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -871,6 +899,55 @@
           },
           "401": {
             "description": "User and password incorrect"
+          }
+        }
+      }
+    },
+    "/quizRecords/{id}/addStudent": {
+      "put": {
+        "tags": ["quizRecord"],
+        "summary": "Update quizRecord's studentList by id",
+        "description": "Return single quizRecord before update",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of quizRecord to return",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "645d04485aa78ee9ac47e189"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Student's input values",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StudentInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/DefaultMongo"
+                    },
+                    {
+                      "$ref": "#/components/schemas/QuizRecord"
+                    }
+                  ]
+                }
+              }
+            }
           }
         }
       }

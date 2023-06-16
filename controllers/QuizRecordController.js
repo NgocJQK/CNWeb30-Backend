@@ -1,8 +1,13 @@
 const quizRecordService = require("../services/QuizRecordService");
 
 exports.getAllQuizRecords = async (req, res) => {
+  //filter
+  let filters = {};
+  if (req.query.quiz) {
+    filters.quiz = req.query.quiz;
+  }
   try {
-    const quizRecords = await quizRecordService.getAllQuizRecords();
+    const quizRecords = await quizRecordService.getAllQuizRecords(filters);
     res.json({ data: quizRecords, status: "success" });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -44,3 +49,17 @@ exports.deleteQuizRecord = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+exports.addStudent = async (req, res) => {
+  try {
+    // const quizId = req.body.quiz;
+    const id = req.params.id;
+    const studentInput = req.body;
+    // console.log(id);
+    // console.log(studentInput)
+    const quizRecord = await quizRecordService.addStudent(id, studentInput);
+    res.json({ data: quizRecord, status: "success" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+}

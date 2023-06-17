@@ -27,11 +27,11 @@ exports.deleteQuizRecord = async (id) => {
   return await QuizRecordModel.findByIdAndDelete(id);
 };
 
-// This part was scrapped since front will handle all of these
-// const getQuizRecordByQuizId = async (quizId) => {
-//   return await QuizRecordModel.findOne({ quiz: `${quizId}` });
-// };
+exports.getQuizRecordByQuizId = async (quizId) => {
+  return await QuizRecordModel.findOne({ quiz: `${quizId}` });
+};
 
+// This part was scrapped since front will handle all of these
 // const checkRecordValidTime = async (quiz, createAt) => {
 //   // const currentTime = new Date().getTime();
 //   const quizStartTime = quiz.startTime.getTime();
@@ -71,7 +71,7 @@ exports.deleteQuizRecord = async (id) => {
 //   return studentRecord;
 // };
 
-exports.addStudent = async (id, studentInput) => {
+exports.addStudent = async (quizId, studentInput) => {
   // let record = await getQuizRecordByQuizId(quizId);
   // let quiz = await QuizService.getQuizById(quizId);
   // let studentRecord = {};
@@ -81,7 +81,7 @@ exports.addStudent = async (id, studentInput) => {
   //   this.updateQuizRecord(record.id, record);
   // }
   // return studentRecord;
-  let record = await this.getQuizRecordById(id);
+  let record = await this.getQuizRecordByQuizId(quizId);
   record.studentList.push(studentInput);
-  return await this.updateQuizRecord(id, record);
+  return await this.updateQuizRecord(record._id, record);
 };

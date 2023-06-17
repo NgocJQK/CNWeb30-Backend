@@ -50,6 +50,15 @@ exports.deleteQuizRecord = async (req, res) => {
   }
 };
 
+exports.getQuizRecordByQuizId = async (req, res) => {
+  try {
+    const quizRecord = await quizRecordService.getQuizRecordByQuizId(req.params.quizId);
+    res.json({ data: quizRecord, status: "success" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
 exports.addStudent = async (req, res) => {
   try {
     // const quizId = req.body.quiz;
@@ -62,4 +71,4 @@ exports.addStudent = async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
-}
+};

@@ -736,7 +736,7 @@
       },
       "put": {
         "tags": ["quizRecord"],
-        "summary": "Update quizRecord by id",
+        "summary": "Update quizRecord's studentList by id",
         "description": "Return single quizRecord before update",
         "parameters": [
           {
@@ -751,12 +751,12 @@
           }
         ],
         "requestBody": {
-          "description": "QuizRecord's updated values",
+          "description": "Student's input values",
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/QuizRecord"
+                "$ref": "#/components/schemas/StudentInput"
               }
             }
           }
@@ -899,55 +899,6 @@
           },
           "401": {
             "description": "User and password incorrect"
-          }
-        }
-      }
-    },
-    "/quizRecords/{id}/addStudent": {
-      "put": {
-        "tags": ["quizRecord"],
-        "summary": "Update quizRecord's studentList by id",
-        "description": "Return single quizRecord before update",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "ID of quizRecord to return",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "example": "645d04485aa78ee9ac47e189"
-            }
-          }
-        ],
-        "requestBody": {
-          "description": "Student's input values",
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/StudentInput"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "allOf": [
-                    {
-                      "$ref": "#/components/schemas/DefaultMongo"
-                    },
-                    {
-                      "$ref": "#/components/schemas/QuizRecord"
-                    }
-                  ]
-                }
-              }
-            }
           }
         }
       }

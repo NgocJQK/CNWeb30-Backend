@@ -11,7 +11,7 @@ const {
 const router = express.Router();
 
 router.route("/").get(getAllQuizRecords).post(createQuizRecord);
-router.route("/:id").get(getQuizRecordById).put(updateQuizRecord).delete(deleteQuizRecord);
-router.route("/:id/addStudent").put(addStudent);
+router.route("/:id").get(getQuizRecordById).put(addStudent).delete(deleteQuizRecord);
+// router.route("/:id/addStudent").put(addStudent);
 
 module.exports = router;

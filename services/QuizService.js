@@ -1,4 +1,5 @@
 const QuizModel = require("../models/Quiz");
+const QuizRecordModel = require("../models/QuizRecord");
 
 const addStatusToQuiz = (quiz) => {
   const currentTime = new Date().getTime();
@@ -6,19 +7,19 @@ const addStatusToQuiz = (quiz) => {
   const quizEndTime = quiz.endTime.getTime();
   let status = "";
   if (currentTime < quizStartTime) {
-    status = "incoming";
+    status = "Not Started";
   } else if (quizEndTime < currentTime) {
-    status = "finished";
+    status = "Finished";
   } else {
-    status = "happening";
+    status = "In Progress";
   }
   quiz.status = status;
   return quiz;
 };
 
 const removeVersionKey = (document) => {
-    return document ? document.toObject({versionKey: false}) : null;
-}
+  return document ? document.toObject({ versionKey: false }) : null;
+};
 
 exports.getAllQuizzes = async (filters = null) => {
   let query = {};
@@ -27,7 +28,7 @@ exports.getAllQuizzes = async (filters = null) => {
       query._class = filters._class;
     }
   }
-  
+
   const quizzes = await QuizModel.find(query).populate("_class");
   let returnData = [];
   quizzes.map((quiz) => {
@@ -42,7 +43,14 @@ exports.getQuizById = async (id) => {
 };
 
 exports.createQuiz = async (quiz) => {
-  return await QuizModel.create(quiz);
+  // When create quiz, a new empty quiz record will be created
+  const newQuiz = await QuizModel.create(quiz);
+  const record = new QuizRecordModel({
+    quiz: newQuiz._id,
+    studentList: [],
+  });
+  QuizRecordModel.create(record);
+  return newQuiz;
 };
 
 exports.updateQuiz = async (id, quiz) => {

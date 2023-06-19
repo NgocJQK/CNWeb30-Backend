@@ -11,5 +11,5 @@ const { validate } = require('../validators/Validator');
 const router = express.Router();
 
 router.route('/').get(getAllClasses).post(createRule(), validate, createClass);
-router.route('/:id').get(getClassById).put(updateClass).delete(deleteClass);
+router.route('/:id').delete(deleteClass);
 module.exports = router;

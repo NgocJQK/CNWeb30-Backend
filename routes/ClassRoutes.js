@@ -1,15 +1,15 @@
-const express = require("express");
+const express = require('express');
 const {
     getAllClasses,
     getClassById,
     createClass,
     updateClass,
-    deleteClass
-} = require("../controllers/ClassController");
-
+    deleteClass,
+} = require('../controllers/ClassController');
+const { createRule } = require('../validators/ClassRule');
+const { validate } = require('../validators/Validator');
 const router = express.Router();
 
-router.route("/").get(getAllClasses).post(createClass);
-router.route("/:id").delete(deleteClass);
-
+router.route('/').get(getAllClasses).post(createRule(), validate, createClass);
+router.route('/:id').delete(deleteClass);
 module.exports = router;

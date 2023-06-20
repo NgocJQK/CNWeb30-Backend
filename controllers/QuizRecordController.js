@@ -62,11 +62,11 @@ exports.getQuizRecordByQuizId = async (req, res) => {
 exports.addStudent = async (req, res) => {
   try {
     // const quizId = req.body.quiz;
-    const id = req.params.id;
+    const quizId = req.params.quizId;
     const studentInput = req.body;
     // console.log(id);
     // console.log(studentInput)
-    const quizRecord = await quizRecordService.addStudent(id, studentInput);
+    const quizRecord = await quizRecordService.addStudent(quizId, studentInput);
     res.json({ data: quizRecord, status: "success" });
   } catch (err) {
     res.status(500).json({ error: err.message });

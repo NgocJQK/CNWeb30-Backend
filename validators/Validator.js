@@ -10,7 +10,7 @@ exports.validate = (req, res, next) => {
   errors.array().map((err) => extractedErrors.push({ [err.path]: err.msg }));
 
   return res.status(422).json({
-    errors: extractedErrors[0],
+    error: extractedErrors[0],
   });
 };
 

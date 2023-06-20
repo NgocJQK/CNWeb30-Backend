@@ -74,10 +74,63 @@
             "format": "url",
             "example": "https://example.com/"
           },
-          "classId": {
-            "type": "string"
+          "_class": {
+            "type": "string",
+            "default": "647afcfd9524a2813008eb90"
           }
         }
+      },
+      "QuizWithoutClass": {
+        "type": "object",
+        "properties": {
+          "startTime": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2023-05-31T08:00:00.000+00:00"
+          },
+          "endTime": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2023-05-31T08:45:00.000+00:00"
+          },
+          "formLink": {
+            "type": "string",
+            "format": "url",
+            "example": "https://example.com/"
+          }
+        }
+      },
+      "QuizResponse": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Quiz"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "status": {
+                "type": "string",
+                "enum": ["Not Started", "In Progress", "Finished"]
+              }
+            }
+          }
+        ]
+      },
+      "QuizWithoutClassResponse": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/QuizWithoutClass"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "status": {
+                "type": "string",
+                "enum": ["Not Started", "In Progress", "Finished"]
+              }
+            }
+          }
+        ]
       },
       "Class": {
         "type": "object",
@@ -113,21 +166,11 @@
             "type": "string",
             "default": "645d04485aa78ee9ac47e189"
           },
-          "studentId": {
-            "type": "string",
-            "default": "20001234"
-          },
-          "studentName": {
-            "type": "string",
-            "default": "Nguyễn Văn A"
-          },
-          "isValid": {
-            "type": "boolean",
-            "default": true
-          },
-          "note": {
-            "type": "string",
-            "default": "A note"
+          "studentList": {
+            "type": "array",
+            "items":{
+              "$ref": "#/components/schemas/StudentInput"
+            }
           }
         }
       },
@@ -189,6 +232,31 @@
             "default": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
           }
         }
+      },
+      "StudentInput": {
+        "type": "object",
+        "properties": {
+          "studentId": {
+            "type": "string",
+            "default": "20001234"
+          },
+          "studentName": {
+            "type": "string",
+            "default": "Nguyễn Văn A"
+          },
+          "ipAddress": {
+            "type": "string",
+            "format": "ipv6"
+          },
+          "isValid": {
+            "type": "boolean",
+            "default": true
+          },
+          "note": {
+            "type": "string",
+            "default": "A note"
+          }
+        }
       }
     }
   },
@@ -198,7 +266,16 @@
         "tags": ["quiz"],
         "summary": "Get all quizzes",
         "description": "Return all quizzes",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "_class",
+            "in": "query",
+            "description": "The class's id required in the results",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -212,7 +289,7 @@
                         "$ref": "#/components/schemas/DefaultMongo"
                       },
                       {
-                        "$ref": "#/components/schemas/Quiz"
+                        "$ref": "#/components/schemas/QuizResponse"
                       }
                     ]
                   }
@@ -287,54 +364,7 @@
                       "$ref": "#/components/schemas/DefaultMongo"
                     },
                     {
-                      "$ref": "#/components/schemas/Quiz"
-                    }
-                  ]
-                }
-              }
-            }
-          }
-        }
-      },
-      "put": {
-        "tags": ["quiz"],
-        "summary": "Update quiz by id",
-        "description": "Return single quiz before update",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "ID of quiz to return",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "example": "645d04485aa78ee9ac47e189"
-            }
-          }
-        ],
-        "requestBody": {
-          "description": "Quiz's updated values",
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Quiz"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "allOf": [
-                    {
-                      "$ref": "#/components/schemas/DefaultMongo"
-                    },
-                    {
-                      "$ref": "#/components/schemas/Quiz"
+                      "$ref": "#/components/schemas/QuizResponse"
                     }
                   ]
                 }
@@ -385,7 +415,17 @@
         "tags": ["class"],
         "summary": "Get all classes",
         "description": "Return all classes",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "groupBy",
+            "in": "query",
+            "description": "Select field to group classes by",
+            "schema": {
+              "type": "string",
+              "default": "semester"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -400,6 +440,24 @@
                       },
                       {
                         "$ref": "#/components/schemas/Class"
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "quizzes": {
+                            "type": "array",
+                            "items":{
+                              "allOf": [
+                                {
+                                  "$ref": "#/components/schemas/QuizWithoutClassResponse"
+                                },
+                                {
+                                  "$ref": "#/components/schemas/DefaultMongo"
+                                }
+                              ]
+                            }
+                          }
+                        }
                       }
                     ]
                   }
@@ -447,89 +505,6 @@
       }
     },
     "/classes/{id}": {
-      "get": {
-        "tags": ["class"],
-        "summary": "Get class by id",
-        "description": "Return single class",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "ID of class to return",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "example": "645d04485aa78ee9ac47e189"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "allOf": [
-                    {
-                      "$ref": "#/components/schemas/DefaultMongo"
-                    },
-                    {
-                      "$ref": "#/components/schemas/Class"
-                    }
-                  ]
-                }
-              }
-            }
-          }
-        }
-      },
-      "put": {
-        "tags": ["class"],
-        "summary": "Update class by id",
-        "description": "Return single class before update",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "ID of class to return",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "example": "645d04485aa78ee9ac47e189"
-            }
-          }
-        ],
-        "requestBody": {
-          "description": "Class's updated values",
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Class"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "allOf": [
-                    {
-                      "$ref": "#/components/schemas/DefaultMongo"
-                    },
-                    {
-                      "$ref": "#/components/schemas/Class"
-                    }
-                  ]
-                }
-              }
-            }
-          }
-        }
-      },
       "delete": {
         "tags": ["class"],
         "summary": "Delete class by id",
@@ -558,193 +533,6 @@
                     },
                     {
                       "$ref": "#/components/schemas/Class"
-                    }
-                  ]
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/quizRecords": {
-      "get": {
-        "tags": ["quizRecord"],
-        "summary": "Get all quizzes",
-        "description": "Return all quizzes",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "allOf": [
-                      {
-                        "$ref": "#/components/schemas/DefaultMongo"
-                      },
-                      {
-                        "$ref": "#/components/schemas/QuizRecord"
-                      }
-                    ]
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "tags": ["quizRecord"],
-        "summary": "Create new quizRecord",
-        "description": "Return new quizRecord created",
-        "parameters": [],
-        "requestBody": {
-          "description": "New quizRecord's values",
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/QuizRecord"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "allOf": [
-                    {
-                      "$ref": "#/components/schemas/DefaultMongo"
-                    },
-                    {
-                      "$ref": "#/components/schemas/QuizRecord"
-                    }
-                  ]
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/quizRecords/{id}": {
-      "get": {
-        "tags": ["quizRecord"],
-        "summary": "Get quizRecord by id",
-        "description": "Return single quizRecord",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "ID of quizRecord to return",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "example": "645d04485aa78ee9ac47e189"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "allOf": [
-                    {
-                      "$ref": "#/components/schemas/DefaultMongo"
-                    },
-                    {
-                      "$ref": "#/components/schemas/QuizRecord"
-                    }
-                  ]
-                }
-              }
-            }
-          }
-        }
-      },
-      "put": {
-        "tags": ["quizRecord"],
-        "summary": "Update quizRecord by id",
-        "description": "Return single quizRecord before update",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "ID of quizRecord to return",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "example": "645d04485aa78ee9ac47e189"
-            }
-          }
-        ],
-        "requestBody": {
-          "description": "QuizRecord's updated values",
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/QuizRecord"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "allOf": [
-                    {
-                      "$ref": "#/components/schemas/DefaultMongo"
-                    },
-                    {
-                      "$ref": "#/components/schemas/QuizRecord"
-                    }
-                  ]
-                }
-              }
-            }
-          }
-        }
-      },
-      "delete": {
-        "tags": ["quizRecord"],
-        "summary": "Delete quizRecord by id",
-        "description": "Return deleted quizRecord",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "ID of quizRecord to return",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "example": "645d04485aa78ee9ac47e189"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "allOf": [
-                    {
-                      "$ref": "#/components/schemas/DefaultMongo"
-                    },
-                    {
-                      "$ref": "#/components/schemas/QuizRecord"
                     }
                   ]
                 }
@@ -835,6 +623,91 @@
           },
           "401": {
             "description": "User and password incorrect"
+          }
+        }
+      }
+    },
+    "/quizRecords/{quizId}": {
+      "get": {
+        "tags": ["quizRecord"],
+        "summary": "Get quizRecord by quiz's id",
+        "description": "Return single quizRecord",
+        "parameters": [
+          {
+            "name": "quizId",
+            "in": "path",
+            "description": "The quiz's id required in the result",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "645d04485aa78ee9ac47e189"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/DefaultMongo"
+                    },
+                    {
+                      "$ref": "#/components/schemas/QuizRecord"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["quizRecord"],
+        "summary": "Update quizRecord's studentList by id",
+        "description": "Return single quizRecord before update",
+        "parameters": [
+          {
+            "name": "quizId",
+            "in": "path",
+            "description": "ID of quizRecord to return",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "645d04485aa78ee9ac47e189"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Student's input values",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StudentInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/DefaultMongo"
+                    },
+                    {
+                      "$ref": "#/components/schemas/QuizRecord"
+                    }
+                  ]
+                }
+              }
+            }
           }
         }
       }

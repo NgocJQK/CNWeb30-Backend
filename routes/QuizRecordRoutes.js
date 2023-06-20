@@ -1,15 +1,20 @@
-const express = require("express");
+const express = require('express');
 const {
-  getAllQuizRecords,
-  getQuizRecordById,
-  createQuizRecord,
-  updateQuizRecord,
-  deleteQuizRecord,
+
+    getAllQuizRecords,
+    getQuizRecordById,
+    createQuizRecord,
+    updateQuizRecord,
+    deleteQuizRecord,
   addStudent,
   getQuizRecordByQuizId,
-} = require("../controllers/QuizRecordController");
+} = require('../controllers/QuizRecordController');
+const { recordRule } = require('../validators/QuizRecordRule');
 
+
+const { validate } = require('../validators/Validator');
 const router = express.Router();
+
 
 // router.route("/").get(getAllQuizRecords).post(createQuizRecord);
 // router

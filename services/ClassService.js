@@ -102,5 +102,9 @@ exports.updateClass = async (id, _class) => {
 };
 
 exports.deleteClass = async (id) => {
+  let deleteQuizzes = await QuizService.getAllQuizzes({_class: id});
+  deleteQuizzes.map(quiz => {
+    QuizService.deleteQuiz(quiz._id);
+  })
   return await ClassModel.findByIdAndDelete(id);
 };

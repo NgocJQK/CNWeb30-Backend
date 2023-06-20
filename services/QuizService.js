@@ -1,5 +1,7 @@
 const QuizModel = require("../models/Quiz");
+const QuizRecord = require("../models/QuizRecord");
 const QuizRecordModel = require("../models/QuizRecord");
+const QuizRecordService = require("../services/QuizRecordService");
 
 const addStatusToQuiz = (quiz) => {
   const currentTime = new Date().getTime();
@@ -58,5 +60,9 @@ exports.updateQuiz = async (id, quiz) => {
 };
 
 exports.deleteQuiz = async (id) => {
+  let deleteRecords = QuizRecordService.getQuizRecordByQuizId(id);
+  deleteRecords.map((record) => {
+    QuizRecordService.deleteQuizRecord(record._id);
+  })
   return await QuizModel.findByIdAndDelete(id);
 };

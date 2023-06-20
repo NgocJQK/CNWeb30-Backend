@@ -80,10 +80,46 @@
           }
         }
       },
+      "QuizWithoutClass": {
+        "type": "object",
+        "properties": {
+          "startTime": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2023-05-31T08:00:00.000+00:00"
+          },
+          "endTime": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2023-05-31T08:45:00.000+00:00"
+          },
+          "formLink": {
+            "type": "string",
+            "format": "url",
+            "example": "https://example.com/"
+          }
+        }
+      },
       "QuizResponse": {
         "allOf": [
           {
             "$ref": "#/components/schemas/Quiz"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "status": {
+                "type": "string",
+                "enum": ["Not Started", "In Progress", "Finished"]
+              }
+            }
+          }
+        ]
+      },
+      "QuizWithoutClassResponse": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/QuizWithoutClass"
           },
           {
             "type": "object",
@@ -408,6 +444,24 @@
                       },
                       {
                         "$ref": "#/components/schemas/Class"
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "quizzes": {
+                            "type": "array",
+                            "items":{
+                              "allOf": [
+                                {
+                                  "$ref": "#/components/schemas/QuizWithoutClassResponse"
+                                },
+                                {
+                                  "$ref": "#/components/schemas/DefaultMongo"
+                                }
+                              ]
+                            }
+                          }
+                        }
                       }
                     ]
                   }

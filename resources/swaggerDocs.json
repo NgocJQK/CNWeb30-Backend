@@ -255,10 +255,6 @@
           "note": {
             "type": "string",
             "default": "A note"
-          },
-          "createdAt" :{
-            "type": "string",
-            "format": "date-time"
           }
         }
       }

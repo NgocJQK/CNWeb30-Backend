@@ -31,10 +31,10 @@ const quizRecordSchema = new Schema(
           type: String,
           default: "",
         },
-        createAt: {
-          type: Date,
-          default: Date.now,
-        },
+        // createAt: {
+        //   type: Date,
+        //   default: Date.now,
+        // },
       },
     ],
   },

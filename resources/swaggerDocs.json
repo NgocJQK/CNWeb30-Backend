@@ -10,7 +10,7 @@
       "description": "Dev server"
     },
     {
-      "url": "http://65.108.79.164:3005/api",
+      "url": "https://cn-web.artsakh.ventures/api",
       "description": "Live server"
     }
   ],

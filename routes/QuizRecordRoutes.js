@@ -8,14 +8,19 @@ const {
   addStudent,
   getQuizRecordByQuizId,
 } = require("../controllers/QuizRecordController");
+const { recordRule } = require("../validators/QuizRecordRule");
 
+const { validate } = require("../validators/Validator");
 const router = express.Router();
 
 // router.route("/").get(getAllQuizRecords).post(createQuizRecord);
 // router
 //   .route("/:id")
 //   .delete(deleteQuizRecord);
-router.route("/:quizId").get(getQuizRecordByQuizId).put(addStudent);
+router
+  .route("/:quizId")
+  .get(getQuizRecordByQuizId)
+  .put(recordRule(), validate, addStudent);
 // router.route("/:id/addStudent").put(addStudent);
 
 module.exports = router;

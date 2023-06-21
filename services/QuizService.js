@@ -1,5 +1,13 @@
 const QuizModel = require("../models/Quiz");
+const QuizRecord = require("../models/QuizRecord");
 const QuizRecordModel = require("../models/QuizRecord");
+const QuizRecordService = require("../services/QuizRecordService");
+
+exports.quizStatus = {
+  notStarted: "Not Started",
+  finished: "Finished",
+  inProgress: "In Progress",
+};
 
 const addStatusToQuiz = (quiz) => {
   const currentTime = new Date().getTime();
@@ -7,11 +15,11 @@ const addStatusToQuiz = (quiz) => {
   const quizEndTime = quiz.endTime.getTime();
   let status = "";
   if (currentTime < quizStartTime) {
-    status = "Not Started";
+    status = this.quizStatus.notStarted;
   } else if (quizEndTime < currentTime) {
-    status = "Finished";
+    status = this.quizStatus.finished;
   } else {
-    status = "In Progress";
+    status = this.quizStatus.inProgress;
   }
   quiz.status = status;
   return quiz;
@@ -58,5 +66,7 @@ exports.updateQuiz = async (id, quiz) => {
 };
 
 exports.deleteQuiz = async (id) => {
+  let deleteRecord = await QuizRecordService.getQuizRecordByQuizId(id);
+  QuizRecordService.deleteQuizRecord(deleteRecord._id);
   return await QuizModel.findByIdAndDelete(id);
 };

@@ -81,6 +81,7 @@ exports.addStudent = async (quizId, studentInput) => {
   //   this.updateQuizRecord(record.id, record);
   // }
   // return studentRecord;
+  
   let record = await this.getQuizRecordByQuizId(quizId);
   record.studentList.push(studentInput);
   return await this.updateQuizRecord(record._id, record);

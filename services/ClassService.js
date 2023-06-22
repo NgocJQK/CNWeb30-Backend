@@ -50,7 +50,6 @@ exports.getAllClasses = async (filters = null) => {
       const {_class, ...returnQuiz} = quiz;
       return returnQuiz;
     });
-    console.log(foundQuizzes);
 
     classObj["quizzes"] = foundQuizzes;
     classObjs.push(classObj);

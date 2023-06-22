@@ -25,7 +25,7 @@ const createRule = () => {
         body('studentCount')
             .trim()
             .exists({ values: 'falsy' })
-            .withMessage('StudentCount is required')
+            .withMessage('Student Count is required')
             .isNumeric()
             .withMessage('Invalid studentCount'),
         body('note').optional().isString().withMessage('Invalid note value'),

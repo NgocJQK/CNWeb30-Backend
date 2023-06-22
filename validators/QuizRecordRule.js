@@ -6,24 +6,43 @@ const Quiz = require("../models/Quiz");
 
 const recordRule = () => {
   return [
-    param("quizId").custom(async (quizId) => {
+    param("quizId").custom(async (quizId, { req }) => {
       let quiz = await quizService.getQuizById(quizId);
       if (quiz.status == quizService.quizStatus.finished) {
         throw new Error(`Quiz ${quizService.quizStatus.finished}`);
       } else if (quiz.status == quizService.quizStatus.notStarted) {
         throw new Error(`Quiz ${quizService.quizStatus.notStarted}`);
       }
+
+      let quizRecord = await quizRecordService.getQuizRecordByQuizId(quizId);
+      if (quizRecord) {
+        let studentList = quizRecord.studentList;
+        if (
+          studentList.some((studentRecord) => {
+            return (
+              studentRecord.studentId === req.body.studentId ||
+              studentRecord.ipAddress === req.body.ipAddress
+            );
+          })
+        ) {
+          throw new Error("Student ID or IP Address already used");
+        }
+      }
     }),
     body("studentId")
       .trim()
       .exists({ value: "falsy" })
-      .withMessage("StudentId is required")
+      .withMessage("Student ID is required")
       .isNumeric()
       .withMessage("Invalid studentId"),
+    body("ipAddress")
+      .trim()
+      .exists({ value: "falsy" })
+      .withMessage("IP Address is required"),
     body("studentName")
       .trim()
       .exists({ value: "falsy" })
-      .withMessage("StudentName is required"),
+      .withMessage("Student Name is required"),
     // body('isValid').optional().isBoolean().withMessage('Invalid isValid value'),
     body("note").optional().isString().withMessage("Invalid note value"),
   ];

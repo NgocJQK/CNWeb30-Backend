@@ -20,7 +20,19 @@ const userSchema = new Schema({
         required: true,
         trim: true,
         minlength: 8
-    }
+    },
+    name: {
+        type: String,
+        default: "Nguyễn Văn A"
+    },
+    gender: {
+        type: Number,
+        default: 1
+    },
+    _classes: [{
+        type: Schema.Types.ObjectId,
+        ref: "Class"
+    }]
 }, {
   timestamps: true
 });

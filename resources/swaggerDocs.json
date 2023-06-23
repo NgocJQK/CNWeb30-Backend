@@ -191,6 +191,20 @@
             "format": "password",
             "minLength": 8,
             "default": "12345678"
+          },
+          "name": {
+            "type": "string",
+            "default": "Nguyễn Văn A"
+          },
+          "gender":{
+           "type": "integer",
+           "default": 1
+          },
+          "_classes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Class"
+            }
           }
         }
       },

@@ -168,31 +168,21 @@
           },
           "studentList": {
             "type": "array",
-            "items":{
+            "items": {
               "$ref": "#/components/schemas/StudentInput"
             }
           }
         }
       },
       "User": {
-        "type": "object",
-        "properties": {
-          "userName": {
-            "type": "string",
-            "default": "Nguyễn Văn A"
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/UserLogin"
           },
-          "email": {
-            "type": "string",
-            "format": "email",
-            "default": "example@mailinator.com"
-          },
-          "password": {
-            "type": "string",
-            "format": "password",
-            "minLength": 8,
-            "default": "12345678"
+          {
+            "$ref": "#/components/schemas/UserInfo"
           }
-        }
+        ]
       },
       "UserLogin": {
         "type": "object",
@@ -210,19 +200,39 @@
           }
         }
       },
-      "UserResponse": {
+      "UserInfo": {
         "type": "object",
         "properties": {
           "userName": {
             "type": "string",
+            "default": "A"
+          },
+          "name": {
+            "type": "string",
             "default": "Nguyễn Văn A"
           },
-          "email": {
-            "type": "string",
-            "format": "email",
-            "default": "example@mailinator.com"
+          "gender": {
+            "type": "integer",
+            "default": 1
           }
         }
+      },
+      "UserResponse": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "email": {
+                "type": "string",
+                "format": "email",
+                "default": "example@mailinator.com"
+              }
+            }
+          },
+          {
+            "$ref": "#/components/schemas/UserInfo"
+          }
+        ]
       },
       "jwt": {
         "type": "object",
@@ -257,6 +267,13 @@
             "default": "A note"
           }
         }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
       }
     }
   },
@@ -446,7 +463,7 @@
                         "properties": {
                           "quizzes": {
                             "type": "array",
-                            "items":{
+                            "items": {
                               "allOf": [
                                 {
                                   "$ref": "#/components/schemas/QuizWithoutClassResponse"

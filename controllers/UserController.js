@@ -34,7 +34,8 @@ exports.register = async (req, res) => {
 exports.login = async (req, res) => {
   try {
     const user = req.body;
-    userService.findUserByEmail(user.email)
+    userService
+      .findUserByEmail(user.email)
       .then((result) => {
         const existUser = result._doc;
         bcrypt
@@ -42,21 +43,21 @@ exports.login = async (req, res) => {
           .then((passwordCheck) => {
             if (!passwordCheck) {
               res.status(401).json({ message: "User and password incorrect" });
+            } else {
+              const token = jwt.sign(
+                {
+                  userId: existUser._id,
+                  userEmail: existUser.email,
+                },
+                userService.secretKey,
+                {
+                  expiresIn: "24h",
+                }
+              );
+
+              const { password: password, ...returnUser } = existUser;
+              res.json({ data: { token, ...returnUser }, status: "success" });
             }
-
-            const token = jwt.sign(
-              {
-                userId: existUser._id,
-                userEmail: existUser.email,
-              },
-              userService.secretKey,
-              {
-                expiresIn: "24h",
-              }
-            );
-
-            const { password: password, ...returnUser } = existUser;
-            res.json({ data: {token, ...returnUser}, status: "success" });
           })
           .catch((err) => {
             res.status(500).json({ error: err.message });

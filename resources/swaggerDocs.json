@@ -53,6 +53,9 @@
           "__v": {
             "type": "number",
             "example": 0
+          },
+          "createBy":{
+           "type": "string"
           }
         }
       },
@@ -269,6 +272,24 @@
         }
       }
     },
+    "responses": {
+      "UnauthorizedError": {
+        "description": "Access token is missing or invalid",
+        "content": {
+          "application/json": {
+            "schema":{
+              "type": "object",
+              "properties": {
+                "error" :{
+                  "type": "string",
+                  "example": "Invalid Request!"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "securitySchemes": {
       "bearerAuth": {
         "type": "http",
@@ -283,6 +304,11 @@
         "tags": ["quiz"],
         "summary": "Get all quizzes",
         "description": "Return all quizzes",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "_class",
@@ -313,6 +339,9 @@
                 }
               }
             }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
           }
         }
       },
@@ -320,6 +349,11 @@
         "tags": ["quiz"],
         "summary": "Create new quiz",
         "description": "Return new quiz created",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "parameters": [],
         "requestBody": {
           "description": "New quiz's values",
@@ -349,6 +383,9 @@
                 }
               }
             }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
           }
         }
       }
@@ -358,6 +395,11 @@
         "tags": ["quiz"],
         "summary": "Get quiz by id",
         "description": "Return single quiz",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "id",
@@ -387,6 +429,9 @@
                 }
               }
             }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
           }
         }
       },
@@ -394,6 +439,11 @@
         "tags": ["quiz"],
         "summary": "Delete quiz by id",
         "description": "Return deleted quiz",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "id",
@@ -423,6 +473,9 @@
                 }
               }
             }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
           }
         }
       }
@@ -432,6 +485,11 @@
         "tags": ["class"],
         "summary": "Get all classes",
         "description": "Return all classes",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "groupBy",
@@ -481,6 +539,9 @@
                 }
               }
             }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
           }
         }
       },
@@ -488,6 +549,11 @@
         "tags": ["class"],
         "summary": "Create new class",
         "description": "Return new class created",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "parameters": [],
         "requestBody": {
           "description": "New class's values",
@@ -517,6 +583,9 @@
                 }
               }
             }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
           }
         }
       }
@@ -526,6 +595,11 @@
         "tags": ["class"],
         "summary": "Delete class by id",
         "description": "Return deleted class",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "id",
@@ -555,6 +629,9 @@
                 }
               }
             }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
           }
         }
       }
@@ -649,6 +726,11 @@
         "tags": ["quizRecord"],
         "summary": "Get quizRecord by quiz's id",
         "description": "Return single quizRecord",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "quizId",
@@ -678,6 +760,9 @@
                 }
               }
             }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
           }
         }
       },

@@ -14,13 +14,22 @@ module.exports = async (request, response, next) => {
 
     // pass the user down to the endpoints here
     request.user = user;
+    // console.log(request.user);
+    // =>
+    // {
+    //   userId: 
+    //   userEmail: 
+    //   iat: 
+    //   exp: 
+    // }
 
     // pass down functionality to the endpoint
     next();
     
   } catch (error) {
     response.status(401).json({
-      error: new Error("Invalid request!"),
+      // error: new Error("Invalid request!"),
+      error: "Invalid request!"
     });
   }
 };

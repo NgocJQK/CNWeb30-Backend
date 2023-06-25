@@ -52,7 +52,7 @@ exports.deleteQuizRecord = async (req, res) => {
 
 exports.getQuizRecordByQuizId = async (req, res) => {
   try {
-    const quizRecord = await quizRecordService.getQuizRecordByQuizId(req.params.quizId);
+    const quizRecord = await quizRecordService.getQuizRecordByQuizId(req.params.quizId, req.user.userId);
     res.json({ data: quizRecord, status: "success" });
   } catch (err) {
     res.status(500).json({ error: err.message });

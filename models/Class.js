@@ -36,6 +36,11 @@ const classSchema = new Schema({
     note: {
         type: String,
         default: ""
+    },
+    createBy: {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+        default: null
     }
 }, {
     timestamps: true

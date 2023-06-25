@@ -24,10 +24,11 @@ const quizSchema = new Schema(
       ref: "Class",
       default: null,
     },
-    // classId: {
-    //   type: String,
-    //   default: "",
-    // },
+    createBy: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      default: null,
+    },
   },
   {
     timestamps: true,

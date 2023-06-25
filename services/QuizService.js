@@ -54,6 +54,8 @@ exports.getQuizById = async (id, userId = null) => {
     if (quiz.createBy != userId) {
       return null;
     }
+  } else {
+    return null;
   }
   return addStatusToQuiz(removeVersionKey(quiz));
 };

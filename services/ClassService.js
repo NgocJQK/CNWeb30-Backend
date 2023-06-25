@@ -117,6 +117,8 @@ exports.deleteClass = async (id, userId = null) => {
     if (_class.createBy != userId) {
       return null;
     }
+  } else {
+    return null;
   }
   
   let deleteQuizzes = await QuizService.getAllQuizzes({_class: id});

@@ -269,6 +269,24 @@
         }
       }
     },
+    "responses": {
+      "UnauthorizedError": {
+        "description": "Access token is missing or invalid",
+        "content": {
+          "application/json": {
+            "schema":{
+              "type": "object",
+              "properties": {
+                "error" :{
+                  "type": "string",
+                  "example": "Invalid Request!"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "securitySchemes": {
       "bearerAuth": {
         "type": "http",
@@ -432,6 +450,11 @@
         "tags": ["class"],
         "summary": "Get all classes",
         "description": "Return all classes",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "groupBy",
@@ -481,6 +504,9 @@
                 }
               }
             }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
           }
         }
       },
@@ -488,6 +514,11 @@
         "tags": ["class"],
         "summary": "Create new class",
         "description": "Return new class created",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "parameters": [],
         "requestBody": {
           "description": "New class's values",
@@ -517,6 +548,9 @@
                 }
               }
             }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
           }
         }
       }
@@ -526,6 +560,11 @@
         "tags": ["class"],
         "summary": "Delete class by id",
         "description": "Return deleted class",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "id",
@@ -555,6 +594,9 @@
                 }
               }
             }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
           }
         }
       }

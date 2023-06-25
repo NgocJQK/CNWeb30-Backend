@@ -34,7 +34,15 @@ const groupBy = async (model, list, property, arrayName) => {
 };
 
 exports.getAllClasses = async (filters = null) => {
-  let classes = await ClassModel.find();
+  // Normal filter
+  let query = {};
+  if (filters) {
+    if ("userId" in filters) {
+      query.createBy = filters.userId;
+    }
+  }
+
+  let classes = await ClassModel.find(query);
   let quizzes = await QuizService.getAllQuizzes();
 
   // add quizzes to class
@@ -55,6 +63,7 @@ exports.getAllClasses = async (filters = null) => {
     classObjs.push(classObj);
   });
 
+  // Special filter
   if (filters) {
     if ("groupBy" in filters) {
       if (filters.groupBy === "semester") {
@@ -92,7 +101,8 @@ exports.getClassById = async (id) => {
   return await ClassModel.findById(id);
 };
 
-exports.createClass = async (_class) => {
+exports.createClass = async (_class, userId = null) => {
+  _class.createBy = userId;
   return await ClassModel.create(_class);
 };
 
@@ -100,7 +110,13 @@ exports.updateClass = async (id, _class) => {
   return await ClassModel.findByIdAndUpdate(id, _class);
 };
 
-exports.deleteClass = async (id) => {
+exports.deleteClass = async (id, userId = null) => {
+  // Protection
+  let _class = await this.getClassById(id);
+  if (_class.createBy != userId) {
+    return null;
+  }
+  
   let deleteQuizzes = await QuizService.getAllQuizzes({_class: id});
   deleteQuizzes.map(quiz => {
     QuizService.deleteQuiz(quiz._id);

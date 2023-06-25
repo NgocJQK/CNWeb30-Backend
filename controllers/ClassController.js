@@ -6,6 +6,9 @@ exports.getAllClasses = async (req, res) => {
   if (req.query.groupBy) {
     filters.groupBy = req.query.groupBy;
   }
+  if (req.user.userId) {
+    filters.userId = req.user.userId;
+  }
 
   try {
     const _classs = await classService.getAllClasses(filters);
@@ -17,7 +20,7 @@ exports.getAllClasses = async (req, res) => {
 
 exports.createClass = async (req, res) => {
   try {
-    const _class = await classService.createClass(req.body);
+    const _class = await classService.createClass(req.body, req.user.userId);
     res.json({ data: _class, status: "success" });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -44,7 +47,7 @@ exports.updateClass = async (req, res) => {
 
 exports.deleteClass = async (req, res) => {
   try {
-    const _class = await classService.deleteClass(req.params.id);
+    const _class = await classService.deleteClass(req.params.id, req.user.userId);
     res.json({ data: _class, status: "success" });
   } catch (err) {
     res.status(500).json({ error: err.message });

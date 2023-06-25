@@ -113,8 +113,10 @@ exports.updateClass = async (id, _class) => {
 exports.deleteClass = async (id, userId = null) => {
   // Protection
   let _class = await this.getClassById(id);
-  if (_class.createBy != userId) {
-    return null;
+  if (_class) {
+    if (_class.createBy != userId) {
+      return null;
+    }
   }
   
   let deleteQuizzes = await QuizService.getAllQuizzes({_class: id});

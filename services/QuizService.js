@@ -50,8 +50,10 @@ exports.getAllQuizzes = async (filters = null) => {
 
 exports.getQuizById = async (id, userId = null) => {
   const quiz = await QuizModel.findById(id).populate("_class");
-  if (quiz.createBy != userId) {
-    return null;
+  if (quiz) {
+    if (quiz.createBy != userId) {
+      return null;
+    }
   }
   return addStatusToQuiz(removeVersionKey(quiz));
 };

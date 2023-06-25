@@ -12,7 +12,7 @@ const { validate } = require("../validators/Validator");
 
 const router = express.Router();
 
-// router.use(auth);
+router.use(auth);
 router.route("/").get(getAllQuizzes).post(createRule(), validate, createQuiz);
 router.route("/:id").get(getQuizById).delete(deleteQuiz);
 

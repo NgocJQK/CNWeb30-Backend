@@ -35,6 +35,9 @@ exports.getAllQuizzes = async (filters = null) => {
     if ("_class" in filters) {
       query._class = filters._class;
     }
+    if ("userId" in filters) {
+      query.createBy = filters.userId;
+    }
   }
 
   const quizzes = await QuizModel.find(query).populate("_class");
@@ -45,13 +48,17 @@ exports.getAllQuizzes = async (filters = null) => {
   return returnData;
 };
 
-exports.getQuizById = async (id) => {
+exports.getQuizById = async (id, userId = null) => {
   const quiz = await QuizModel.findById(id).populate("_class");
+  if (quiz.createBy != userId) {
+    return null;
+  }
   return addStatusToQuiz(removeVersionKey(quiz));
 };
 
-exports.createQuiz = async (quiz) => {
+exports.createQuiz = async (quiz, userId = null) => {
   // When create quiz, a new empty quiz record will be created
+  quiz.createBy = userId;
   const newQuiz = await QuizModel.create(quiz);
   const record = new QuizRecordModel({
     quiz: newQuiz._id,
@@ -65,7 +72,11 @@ exports.updateQuiz = async (id, quiz) => {
   return await QuizModel.findByIdAndUpdate(id, quiz);
 };
 
-exports.deleteQuiz = async (id) => {
+exports.deleteQuiz = async (id, userId = null) => {
+  let quiz = this.getQuizById(id, userId);
+  if (quiz === null) {
+    return null;
+  }
   let deleteRecord = await QuizRecordService.getQuizRecordByQuizId(id);
   QuizRecordService.deleteQuizRecord(deleteRecord._id);
   return await QuizModel.findByIdAndDelete(id);

@@ -726,6 +726,11 @@
         "tags": ["quizRecord"],
         "summary": "Get quizRecord by quiz's id",
         "description": "Return single quizRecord",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "quizId",
@@ -755,6 +760,9 @@
                 }
               }
             }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
           }
         }
       },

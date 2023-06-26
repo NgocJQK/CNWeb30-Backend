@@ -206,10 +206,6 @@
       "UserInfo": {
         "type": "object",
         "properties": {
-          "userName": {
-            "type": "string",
-            "default": "A"
-          },
           "name": {
             "type": "string",
             "default": "Nguyễn Văn A"

@@ -2,18 +2,12 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
-    userName: {
-        type: String,
-        default: () => {
-            const date = new Date().toJSON();
-            return `user_${date}`
-        }
-    },
     email: {
         type: String,
         unique: true,
         required: true,
-        trim: true
+        trim: true,
+        lowercase: true
     },
     password: {
         type: String,
@@ -28,11 +22,7 @@ const userSchema = new Schema({
     gender: {
         type: Number,
         default: 1
-    },
-    _classes: [{
-        type: Schema.Types.ObjectId,
-        ref: "Class"
-    }]
+    }
 }, {
   timestamps: true
 });

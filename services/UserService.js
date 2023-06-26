@@ -7,6 +7,7 @@ exports.secretKey =
   "Dg6ooDLEvh5BJKZNEXI4tByo8DRWNto9bP6tMoWMIqnTJWkSKdccq6M2pqPeqMOHPmHHnQqtWlG77cxyHJ6A3Kt7JfFxGAcjsB1NjaJZukzLhNSnaSTCYtvVyGKwVKUv";
 
 exports.findUserByEmail = async (email) => {
+  email = email.trim().toLowerCase();
   return await UserModel.findOne({ email: `${email}` });
 };
 

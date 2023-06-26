@@ -11,7 +11,7 @@ const {
 const { recordRule } = require("../validators/QuizRecordRule");
 const { validate } = require("../validators/Validator");
 const router = express.Router();
-const auth = require("../auth/auth");
+// const auth = require("../auth/auth");
 
 // router.route("/").get(getAllQuizRecords).post(createQuizRecord);
 // router
@@ -19,7 +19,7 @@ const auth = require("../auth/auth");
 //   .delete(deleteQuizRecord);
 router
   .route("/:quizId")
-  .get(auth, getQuizRecordByQuizId)
+  .get(getQuizRecordByQuizId)
   .put(recordRule(), validate, addStudent);
 // router.route("/:id/addStudent").put(addStudent);
 

@@ -27,11 +27,7 @@ exports.deleteQuizRecord = async (id) => {
   return await QuizRecordModel.findByIdAndDelete(id);
 };
 
-exports.getQuizRecordByQuizId = async (quizId, userId = null) => {
-  let quiz = QuizService.getQuizById(quizId, userId);
-  if (quiz === null) {
-    return null;
-  }
+exports.getQuizRecordByQuizId = async (quizId) => {
   return await QuizRecordModel.findOne({ quiz: `${quizId}` });
 };
 

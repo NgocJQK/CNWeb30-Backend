@@ -12,8 +12,8 @@ const { validate } = require("../validators/Validator");
 
 const router = express.Router();
 
-router.use(auth);
-router.route("/").get(getAllQuizzes).post(createRule(), validate, createQuiz);
-router.route("/:id").get(getQuizById).delete(deleteQuiz);
+// router.use(auth);
+router.route("/").get(auth, getAllQuizzes).post(auth, createRule(), validate, createQuiz);
+router.route("/:id").get(getQuizById).delete(auth, deleteQuiz);
 
 module.exports = router;

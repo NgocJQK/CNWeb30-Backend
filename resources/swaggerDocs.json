@@ -395,11 +395,6 @@
         "tags": ["quiz"],
         "summary": "Get quiz by id",
         "description": "Return single quiz",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
         "parameters": [
           {
             "name": "id",
@@ -429,9 +424,6 @@
                 }
               }
             }
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedError"
           }
         }
       },
@@ -726,11 +718,6 @@
         "tags": ["quizRecord"],
         "summary": "Get quizRecord by quiz's id",
         "description": "Return single quizRecord",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
         "parameters": [
           {
             "name": "quizId",
@@ -760,9 +747,6 @@
                 }
               }
             }
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedError"
           }
         }
       },

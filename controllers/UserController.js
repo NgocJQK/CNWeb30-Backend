@@ -11,8 +11,7 @@ exports.register = async (req, res) => {
         .hash(user.password, 10)
         .then((hashedPassword) => {
           const newUser = {
-            userName: user.userName,
-            email: user.email,
+            ...user,
             password: hashedPassword,
           };
           userService.createUser(newUser).then((result) => {

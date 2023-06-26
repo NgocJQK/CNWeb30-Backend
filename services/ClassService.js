@@ -10,21 +10,21 @@ const QuizService = require("../services/QuizService");
  * @param {String} arrayName the name of the new array of each group
  * @returns {array}
  */
-const groupBy = async (model, list, property, arrayName) => {
+const groupBy = async (list, property, arrayName) => {
   // initialize return list
-  let returnData = await model.aggregate().group({
-    _id: `$${property}`,
-  });
-  returnData.map((data) => {
-    data[`${property}`] = data["_id"];
-    delete data["_id"];
+  let uniqueValue = [...new Set(list.map(item => item[property]))]
+  let returnData = []
+  uniqueValue.map((value) => {
+    let data = {}
+    data[property] = value;
     data[arrayName] = [];
-  });
+    returnData.push(data);
+  })
 
   // put items from old array to new array inside return list
   list.map((oldItem) => {
     returnData.map((newItem) => {
-      if (oldItem[`${property}`] === newItem[`${property}`]) {
+      if (oldItem[property] === newItem[property]) {
         newItem[arrayName].push(oldItem);
       }
     });
@@ -34,67 +34,77 @@ const groupBy = async (model, list, property, arrayName) => {
 };
 
 exports.getAllClasses = async (filters = null) => {
-  // Normal filter
-  let query = {};
-  if (filters) {
-    if ("userId" in filters) {
-      query.createBy = filters.userId;
-    }
-  }
-
-  let classes = await ClassModel.find(query);
-  let quizzes = await QuizService.getAllQuizzes();
-
-  // add quizzes to class
-  let classObjs = [];
-  classes.map((_class) => {
-    classObj = _class.toObject()
-
-    // get quiz by class and remove _class property in quiz
-    let foundQuizzes = quizzes.filter(
-      (quiz) => quiz._class._id.toString() == _class._id.toString()
-    ).map((quiz) => {
-      // remove _class property in quiz
-      const {_class, ...returnQuiz} = quiz;
-      return returnQuiz;
-    });
-
-    classObj["quizzes"] = foundQuizzes;
-    classObjs.push(classObj);
-  });
-
-  // Special filter
-  if (filters) {
-    if ("groupBy" in filters) {
-      if (filters.groupBy === "semester") {
-        // This part was generalized in the groupBy function
-        // This is kept for code understanding
-        // // get semesters
-        // let semesters = await ClassModel.aggregate().group({
-        //   _id: "$semester",
-        // });
-        // semesters.map((semester) => {
-        //   semester["semester"] = semester["_id"];
-        //   delete semester["_id"];
-        //   semester._classes = [];
-        // });
-
-        // // list classes
-        // classes.map((_class) => {
-        //   semesters.map((semester) => {
-        //     if (_class.semester === semester.semester) {
-        //       semester._classes.push(_class.toObject());
-        //     }
-        //   });
-        // });
-
-        // return semesters;
-        return await groupBy(ClassModel, classObjs, filters.groupBy, "_classes");
+  try {
+    // Normal filter
+    let query = {};
+    if (filters) {
+      if ("userId" in filters) {
+        query.createBy = filters.userId;
       }
     }
+
+    let classes = await ClassModel.find(query);
+    let quizzes = await QuizService.getAllQuizzes();
+
+    // add quizzes to class
+    let classObjs = [];
+    classes.map((_class) => {
+      classObj = _class.toObject();
+
+      // get quiz by class and remove _class property in quiz
+      let foundQuizzes = quizzes
+        .filter((quiz) => quiz._class != null && quiz._class._id.toString() == _class._id.toString())
+        .map((quiz) => {
+          // remove _class property in quiz
+          const { _class, ...returnQuiz } = quiz;
+          return returnQuiz;
+        });
+
+      classObj["quizzes"] = foundQuizzes;
+      classObjs.push(classObj);
+    });
+
+    // Special filter
+    if (filters) {
+      if ("groupBy" in filters) {
+        if (filters.groupBy === "semester") {
+          // This part was generalized in the groupBy function
+          // This is kept for code understanding
+          // // get semesters
+          // let semesters = [...new Set(classObjs.map(classObj => classObj.semester))]
+          // let groups = []
+          // semesters.map((semester) => {
+          //   const group = {
+          //     semester: semester,
+          //     _classes: []
+          //   }
+          //   groups.push(group);
+          // })
+
+          // // list classes
+          // classes.map((_class) => {
+          //   groups.map((group) => {
+          //     if (_class.semester === group.semester) {
+          //       group._classes.push(_class.toObject());
+          //     }
+          //   });
+          // });
+
+          // return groups;
+
+          return await groupBy(
+            classObjs,
+            filters.groupBy,
+            "_classes"
+          );
+        }
+      }
+    }
+    // return await ClassModel.find();
+    return classObjs;
+  } catch (error) {
+    console.log(error);
   }
-  // return await ClassModel.find();
-  return classObjs;
 };
 
 exports.getClassById = async (id) => {
@@ -120,10 +130,10 @@ exports.deleteClass = async (id, userId = null) => {
   } else {
     return null;
   }
-  
-  let deleteQuizzes = await QuizService.getAllQuizzes({_class: id});
-  deleteQuizzes.map(quiz => {
+
+  let deleteQuizzes = await QuizService.getAllQuizzes({ _class: id });
+  deleteQuizzes.map((quiz) => {
     QuizService.deleteQuiz(quiz._id);
-  })
+  });
   return await ClassModel.findByIdAndDelete(id);
 };

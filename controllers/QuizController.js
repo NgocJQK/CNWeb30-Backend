@@ -29,7 +29,7 @@ exports.createQuiz = async (req, res) => {
 
 exports.getQuizById = async (req, res) => {
   try {
-    const quiz = await quizService.getQuizById(req.params.id, req.user.userId);
+    const quiz = await quizService.getQuizById(req.params.id);
     res.json({ data: quiz, status: "success" });
   } catch (err) {
     res.status(500).json({ error: err.message });

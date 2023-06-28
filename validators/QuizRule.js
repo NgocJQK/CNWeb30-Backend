@@ -14,13 +14,17 @@ const createRule = () => {
       .withMessage("EndTime is required")
       .isISO8601()
       .withMessage("Invalid date"),
+
+      // isURL is not working with optional so use if to catch empty string
     body("formLink")
+      .trim()
       .optional({ value: "falsy" })
+      .if(url => url !== "")
       .isURL()
-      .withMessage("Invalid Form Link")
+      .withMessage("Invalid Form Link"),
   ];
 };
 
 module.exports = {
-    createRule
-}
+  createRule,
+};

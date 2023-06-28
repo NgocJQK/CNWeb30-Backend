@@ -41,6 +41,9 @@ exports.getAllClasses = async (filters = null) => {
       if ("userId" in filters) {
         query.createBy = filters.userId;
       }
+      if ("codename" in filters) {
+        query.codename = filters.codename;
+      }
     }
 
     let classes = await ClassModel.find(query);

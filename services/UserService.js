@@ -14,3 +14,17 @@ exports.findUserByEmail = async (email) => {
 exports.createUser = async (user) => {
   return await UserModel.create(user);
 }
+
+exports.getUserById = async (id) => {
+  return await UserModel.findById(id);
+}
+
+exports.updateUser = async (id, user) => {
+  let existUser = await this.getUserById(id);
+  const updatedUser = {
+    ...user,
+    email: existUser.email,
+    password: existUser.password
+  }
+  return await UserModel.findByIdAndUpdate(id, updatedUser);
+}

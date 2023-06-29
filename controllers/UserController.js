@@ -69,3 +69,31 @@ exports.login = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+exports.getUserById = async (req, res) => {
+  try {
+    if (req.params.id === req.user.userId) {  
+      const user = await userService.getUserById(req.params.id);
+      const {password: password, ...returnData} = user._doc;
+      res.json({ data: returnData, status: "success" });
+    } else {
+      res.json({ data: null, status: "success" });
+    }
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+}
+
+exports.updateUser = async (req, res) => {
+  try {
+    if (req.params.id === req.user.userId) {  
+      const user = await userService.updateUser(req.params.id, req.body);
+      const {password: password, ...returnData} = user._doc;
+      res.json({ data: returnData, status: "success" });
+    } else {
+      res.json({ data: null, status: "success" });
+    }
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+}

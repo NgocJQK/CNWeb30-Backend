@@ -72,17 +72,45 @@ exports.getQuizRecordByQuizId = async (quizId) => {
 // };
 
 exports.addStudent = async (quizId, studentInput) => {
-  // let record = await getQuizRecordByQuizId(quizId);
-  // let quiz = await QuizService.getQuizById(quizId);
-  // let studentRecord = {};
-  // if (record && quiz) {
-  //   studentRecord = processStudentInput(quiz, studentInput);
-  //   record.studentList.push(studentRecord);
-  //   this.updateQuizRecord(record.id, record);
-  // }
-  // return studentRecord;
-  
+  // As of issue #53, all student input will be accepted regardless
+  // The input will be checked and the result will be showed in isValid and note
+
+  // Prepare
   let record = await this.getQuizRecordByQuizId(quizId);
-  record.studentList.push(studentInput);
+  let quiz = await QuizService.getQuizById(quizId);
+  let studentRecord = {
+    studentId: studentInput.studentId ? studentInput.studentId : "",
+    studentName: studentInput.studentName ? studentInput.studentName : "",
+    ipAddress: studentInput.ipAddress,
+    isValid: studentInput.isValid ? studentInput.isValid : true,
+    note: studentInput.note ? studentInput.note : "",
+  };
+
+  // Checking
+  // ...Location - This was the way to check disscussed in the issue
+  if (studentRecord.studentId === "" && studentRecord.studentName === "") {
+    studentRecord.isValid = false;
+    studentRecord.note = defaultNote.wrongLocation;
+  }
+  // ...Existed
+  if (
+    record.studentList.some((item) => {
+      return (
+        item.studentId === studentRecord.studentId ||
+        item.ipAddress === studentRecord.ipAddress
+      );
+    })
+  ) {
+    studentRecord.isValid = false;
+    studentRecord.note = defaultNote.existed;
+  }
+  // ...Expired
+  if (quiz.status === QuizService.quizStatus.finished) {
+    studentRecord.isValid = false;
+    studentRecord.note = defaultNote.expired;
+  }
+
+  // Saving
+  record.studentList.push(studentRecord);
   return await this.updateQuizRecord(record._id, record);
 };

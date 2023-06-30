@@ -1,5 +1,6 @@
 const QuizRecordModel = require("../models/QuizRecord");
 const QuizService = require("./QuizService");
+const ClassService = require("../services/ClassService");
 
 exports.getAllQuizRecords = async (filters = null) => {
   let query = {};
@@ -28,7 +29,23 @@ exports.deleteQuizRecord = async (id) => {
 };
 
 exports.getQuizRecordByQuizId = async (quizId) => {
-  return await QuizRecordModel.findOne({ quiz: `${quizId}` });
+  let record = await QuizRecordModel.findOne({ quiz: `${quizId}` });
+  let recordObj = record ? record.toObject() : null;
+  // return await QuizRecordModel.findOne({ quiz: `${quizId}` });
+  if (recordObj) {
+    recordObj.submissionCount = recordObj.studentList.length;
+    recordObj.classStudentCount = async () => {
+      const quiz = await QuizService.getQuizById(quizId);
+      if (quiz) {
+        const _class = await ClassService.getClassById(quiz._class);
+        if (_class) {
+          return _class.studentCount;
+        }
+      }
+      return 0;
+    }
+  }
+  return recordObj;
 };
 
 // This part was scrapped since front will handle all of these

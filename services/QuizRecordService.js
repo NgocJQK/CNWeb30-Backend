@@ -2,6 +2,12 @@ const QuizRecordModel = require("../models/QuizRecord");
 const QuizService = require("./QuizService");
 const ClassService = require("../services/ClassService");
 
+const defaultNote = {
+  existed: "FAIL_EXISTED",
+  wrongLocation: "FAIL_DISTANCE",
+  expired: "FAIL_EXPIRED",
+};
+
 exports.getAllQuizRecords = async (filters = null) => {
   let query = {};
   if (filters) {
@@ -34,16 +40,15 @@ exports.getQuizRecordByQuizId = async (quizId) => {
   // return await QuizRecordModel.findOne({ quiz: `${quizId}` });
   if (recordObj) {
     recordObj.submissionCount = recordObj.studentList.length;
-    recordObj.classStudentCount = async () => {
-      const quiz = await QuizService.getQuizById(quizId);
-      if (quiz) {
-        const _class = await ClassService.getClassById(quiz._class);
-        if (_class) {
-          return _class.studentCount;
-        }
+    let studentCount = 0;
+    const quiz = await QuizService.getQuizById(quizId);
+    if (quiz) {
+      const _class = await ClassService.getClassById(quiz._class);
+      if (_class) {
+        studentCount = _class.studentCount;
       }
-      return 0;
     }
+    recordObj.classStudentCount = studentCount;
   }
   return recordObj;
 };
@@ -100,14 +105,14 @@ exports.addStudent = async (quizId, studentInput) => {
     studentName: studentInput.studentName ? studentInput.studentName : "",
     ipAddress: studentInput.ipAddress,
     isValid: studentInput.isValid ? studentInput.isValid : true,
-    note: studentInput.note ? studentInput.note : "",
+    note: studentInput.note ? studentInput.note + " " : "",
   };
 
   // Checking
   // ...Location - This was the way to check disscussed in the issue
   if (studentRecord.studentId === "" && studentRecord.studentName === "") {
     studentRecord.isValid = false;
-    studentRecord.note = defaultNote.wrongLocation;
+    studentRecord.note = defaultNote.wrongLocation + " ";
   }
   // ...Existed
   if (
@@ -119,12 +124,12 @@ exports.addStudent = async (quizId, studentInput) => {
     })
   ) {
     studentRecord.isValid = false;
-    studentRecord.note = defaultNote.existed;
+    studentRecord.note += defaultNote.existed + " ";
   }
   // ...Expired
   if (quiz.status === QuizService.quizStatus.finished) {
     studentRecord.isValid = false;
-    studentRecord.note = defaultNote.expired;
+    studentRecord.note += defaultNote.expired + " ";
   }
 
   // Saving

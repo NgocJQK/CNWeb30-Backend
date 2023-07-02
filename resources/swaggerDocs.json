@@ -319,7 +319,7 @@
       "get": {
         "tags": ["quiz"],
         "summary": "Get all quizzes",
-        "description": "Return all quizzes",
+        "description": "Return all quizzes sort by latest startTime, then createdAt, first",
         "security": [
           {
             "bearerAuth": []

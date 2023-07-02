@@ -45,6 +45,26 @@ exports.getAllQuizzes = async (filters = null) => {
   quizzes.map((quiz) => {
     returnData.push(addStatusToQuiz(removeVersionKey(quiz)));
   });
+  returnData.sort((a, b) => {
+    aStart = a.startTime.getTime();
+    bStart = b.startTime.getTime();
+    aCreate = a.createdAt.getTime();
+    bCreate = b.createdAt.getTime();
+    // if (aStart < bStart) {
+    //   return -1;
+    // } else if (aStart > bStart) {
+    //   return 1;
+    // } else {
+    //   if (aCreate < bCreate) {
+    //     return -1;
+    //   } else if (aCreate > bCreate) {
+    //     return 1; 
+    //   } else {
+    //     return 0;
+    //   }
+    // }
+    return aStart === bStart ? bCreate - aCreate : bStart - aStart;
+  })
   return returnData;
 };
 

@@ -112,7 +112,7 @@ exports.addStudent = async (quizId, studentInput) => {
   // ...Location - This was the way to check disscussed in the issue
   if (studentRecord.studentId === "" && studentRecord.studentName === "") {
     studentRecord.isValid = false;
-    studentRecord.note = defaultNote.wrongLocation + " ";
+    studentRecord.note = defaultNote.wrongLocation;
   }
   // ...Existed
   if (
@@ -124,12 +124,12 @@ exports.addStudent = async (quizId, studentInput) => {
     })
   ) {
     studentRecord.isValid = false;
-    studentRecord.note += defaultNote.existed + " ";
+    studentRecord.note = defaultNote.existed;
   }
   // ...Expired
   if (quiz.status === QuizService.quizStatus.finished) {
     studentRecord.isValid = false;
-    studentRecord.note += defaultNote.expired + " ";
+    studentRecord.note = defaultNote.expired;
   }
 
   // Saving

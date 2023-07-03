@@ -54,8 +54,8 @@
             "type": "number",
             "example": 0
           },
-          "createBy":{
-           "type": "string"
+          "createBy": {
+            "type": "string"
           }
         }
       },
@@ -177,6 +177,26 @@
           }
         }
       },
+      "QuizRecordResponse": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "submissionCount": {
+                "type": "integer",
+                "default": "50"
+              },
+              "classStudentCount": {
+                "type": "integer",
+                "default": "50"
+              }
+            }
+          },
+          {
+            "$ref": "#/components/schemas/QuizRecord"
+          }
+        ]
+      },
       "User": {
         "allOf": [
           {
@@ -273,10 +293,10 @@
         "description": "Access token is missing or invalid",
         "content": {
           "application/json": {
-            "schema":{
+            "schema": {
               "type": "object",
               "properties": {
-                "error" :{
+                "error": {
                   "type": "string",
                   "example": "Invalid Request!"
                 }
@@ -299,7 +319,7 @@
       "get": {
         "tags": ["quiz"],
         "summary": "Get all quizzes",
-        "description": "Return all quizzes",
+        "description": "Return all quizzes sort by latest startTime, then createdAt, first",
         "security": [
           {
             "bearerAuth": []
@@ -737,7 +757,7 @@
                       "$ref": "#/components/schemas/DefaultMongo"
                     },
                     {
-                      "$ref": "#/components/schemas/QuizRecord"
+                      "$ref": "#/components/schemas/QuizRecordResponse"
                     }
                   ]
                 }

@@ -13,7 +13,7 @@ const userRouter = require("./routes/UserRoutes");
 //configure mongoose
 mongoose.set('strictQuery', false);
 mongoose.connect(
-  process.env.MONGODB_URI || "mongodb+srv://admin:admin@cnwebcluster.obhhajd.mongodb.net/QuizDB?retryWrites=true&w=majority",
+  process.env.MONGODB_URI || "mongodb+srv://onion209hust:LmHnTGsARveE4X7L@cluster0.jz3pe3d.mongodb.net/",
   {
     useNewUrlParser: true,
     useUnifiedTopology: true,
